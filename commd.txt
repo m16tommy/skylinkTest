@@ -1,0 +1,18 @@
+$ cd /opt/fabric-samples/chaincode/
+$ git clone https://github.com/m16tommy/skylinkTest.git
+$ cd /opt/fabric-samples/chaincode-docker-devmode/
+$ docker-compose -f docker-compose-simple.yaml up
+
+$ docker exec -it chaincode bash
+# cd skylinkTest/chaincode
+# go build -o skylinkTest
+# CORE_PEER_ADDRESS=peer:7052 CORE_CHAINCODE_ID_NAME=skylinkTest:0 ./skylinkTest
+
+$ docker exec -it cli bash
+# peer chaincode install -p chaincodedev/chaincode/skylinkTest/chaincode -n skylinkTest -v 0
+# peer chaincode instantiate -n skylinkTest -v 0 -c '{"Args":["init"]}' -C myc
+# export CHANNEL_NAME=myc
+# export CHAINCODE_NAME=skylinkTest
+
+# peer chaincode invoke -C $CHANNEL_NAME -n $CHAINCODE_NAME -c '{"Args":["insert","001","850","888","tommy"]}'
+# peer chaincode invoke -C $CHANNEL_NAME -n $CHAINCODE_NAME -c '{"Args":["query","001"]}'
