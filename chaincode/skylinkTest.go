@@ -98,6 +98,7 @@ func (t *SimpleChaincode) insert(stub shim.ChaincodeStubInterface, args []string
 func (t *SimpleChaincode) delete(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	msgObj := argsToMsgObj(args)
 	err := stub.DelState(msgObj.MsgNo)
+
 	if err != nil {
 		return shim.Error("Failed to delete state")
 	}
