@@ -29,8 +29,6 @@ func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	fmt.Println("Starting Item Auction Application chaincode BlueMix ver 21 Dated 2016-07-02 09.45.00: ")
 
-	//ccPath = fmt.Sprintf("%s/src/github.com/hyperledger/fabric/auction/art/artchaincode/", gopath)
-	// Start the shim -- running the fabric
 	err := shim.Start(new(SimpleChaincode))
 	if err != nil {
 		fmt.Println("Error starting Item Fun Application chaincode: %s", err)
@@ -39,12 +37,7 @@ func main() {
 }
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 
-	// TODO - Include all initialization to be complete before Invoke and Query
-	// Uses aucTables to delete tables if they exist and re-create them
-
-	//myLogger.Info("[Trade and Auction Application] Init")
 	fmt.Println("[Trade and Auction Application] Init")
-	// TODO: could we rather save the hash of the picture on the BC ?
 	fmt.Println("\nInit() Initialization Complete ")
 	return shim.Success(nil)
 }
@@ -54,16 +47,12 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	fmt.Println("==========================================================")
 	fmt.Println("BEGIN Function ====> ", function)
 	if function == "insert" {
-		// Make payment of X units from A to B
 		return t.insert(stub, args)
 	} else if function == "delete" {
-		// Deletes an entity from its state
 		return t.delete(stub, args)
 	} else if function == "query" {
-		// the old "Query" is now implemtned in invoke
 		return t.query(stub, args)
 	} else if function == "update" {
-		// the old "Query" is now implemtned in invoke
 		return t.update(stub, args)
 	}
 
@@ -107,6 +96,11 @@ func (t *SimpleChaincode) insert(stub shim.ChaincodeStubInterface, args []string
 }
 
 func (t *SimpleChaincode) delete(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	msgObj := argsToMsgObj(args)
+	err := stub.DelState(msgObj.MsgNo)
+	if err != nil {
+		return shim.Error("Failed to delete state")
+	}
 	return shim.Success(nil)
 }
 
